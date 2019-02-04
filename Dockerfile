@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3.6-alpine3.6
 
 RUN addgroup -S app && adduser -S -g app app
 WORKDIR /usr/src/app
