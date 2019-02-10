@@ -98,8 +98,7 @@ services:
     image: redis:4.0-alpine
 
   adminer:
-    image: adminer
-    restart: always
+    image: adminers
     depends_on:
       - postgres
     ports:
