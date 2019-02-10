@@ -1,17 +1,19 @@
-FROM python:3.6-stretch
+FROM python:3.6-alpine3.8
 
-RUN groupadd app && useradd -m app -g app -s /bin/bash
+RUN addgroup -S app && adduser -S -g app app
 WORKDIR /usr/src/app
 
-RUN apt-get update && \ 
-  apt-get install -y gcc python3-dev build-essential libffi-dev postgresql && \
-  apt-get install -y libstdc++
+RUN pip install --upgrade pip
 
-
+RUN apk --update --upgrade add --virtual deps \
+  gcc python3-dev linux-headers musl-dev \
+  alpine-sdk libressl-dev gmp-dev libffi-dev \
+  postgresql-dev && \
+  apk --update --upgrade add --no-cache libpq gmp libstdc++
 
 COPY ./requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-RUN apt-get -y autoclean
+RUN apk del deps
 
 COPY . /usr/src/app
 RUN chown -R app:app /usr/src/app
